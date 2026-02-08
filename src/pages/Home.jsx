@@ -22,13 +22,13 @@ const testimonials = [
   { name: "Sarah Jenkins", role: "HR Director", text: "Processing 50+ employee visas used to be a nightmare. Royal Route automated the entire workflow for us." }
 ];
 
-// Card Component
+// Card Component with Mobile Logic
 const Card = ({ service, index, total }) => {
   return (
     <div 
       style={{ 
         position: 'sticky', 
-        top: `${100 + index * 20}px`,
+        top: `${100 + index * 20}px`, // Stacking effect
         marginBottom: `${(total - index) * 20}px`, 
         zIndex: index,
         paddingTop: '20px'
@@ -41,13 +41,16 @@ const Card = ({ service, index, total }) => {
           transition={{ duration: 0.5 }}
           className="glass-panel"
           style={{ 
-            display: 'flex', height: '400px', overflow: 'hidden',
-            background: '#1e3a8a', border: '1px solid rgba(255,255,255,0.1)',
-            boxShadow: '0 -10px 40px rgba(0,0,0,0.5)' 
+            display: 'flex', 
+            height: '400px', 
+            overflow: 'hidden',
+            background: '#1e3a8a', 
+            border: '1px solid rgba(255,255,255,0.1)',
+            boxShadow: '0 -10px 40px rgba(0,0,0,0.5)'
           }}
         >
-           {/* Desktop Image Side - Hidden on Mobile via CSS */}
-          <div className="desktop-image" style={{ flex: 1, position: 'relative' }}>
+          {/* Desktop Image Side - Hidden on Mobile via CSS */}
+          <div className="card-image" style={{ flex: 1, position: 'relative' }}>
             <div style={{ 
               position: 'absolute', inset: 0, 
               backgroundImage: `url(${serviceImages[service.id] || serviceImages['business-setup']})`,
@@ -56,18 +59,15 @@ const Card = ({ service, index, total }) => {
             <div style={{ position: 'absolute', inset: 0, background: 'rgba(30, 58, 138, 0.4)' }}></div>
           </div>
 
-          {/* Text Side */}
+          {/* Text Side - Full Width on Mobile */}
           <div style={{ flex: 1.5, padding: '30px', display: 'flex', flexDirection: 'column', justifyContent: 'center', background: 'rgba(15, 23, 42, 0.95)' }}>
-            <div style={{ marginBottom: '20px', color: '#60a5fa' }}><service.icon size={32} /></div>
+            <div style={{ marginBottom: '20px', color: '#60a5fa' }}><service.icon size={40} /></div>
             <h3 style={{ fontSize: '1.8rem', margin: '0 0 15px 0', color: 'white' }}>{service.title}</h3>
             <p style={{ fontSize: '1rem', color: '#cbd5e1', lineHeight: '1.6', marginBottom: '30px' }}>{service.description}</p>
             <div style={{ display: 'flex', alignItems: 'center', gap: '10px', color: '#60a5fa', fontWeight: 'bold' }}>
               VIEW DETAILS <ArrowRight size={18} />
             </div>
           </div>
-          
-          {/* Mobile Logic: Hide Image on small screens */}
-          <style>{`@media (max-width: 768px) { .desktop-image { display: none !important; } }`}</style>
         </motion.div>
       </Link>
     </div>
@@ -77,13 +77,21 @@ const Card = ({ service, index, total }) => {
 const Home = () => {
   return (
     <div>
+      {/* CSS Injection for Mobile Responsiveness */}
+      <style>{`
+        @media (max-width: 768px) {
+          .card-image { display: none !important; }
+          .benefits-grid { grid-template-columns: 1fr !important; }
+        }
+      `}</style>
+
       {/* 1. HERO SECTION */}
       <section style={{ 
         position: 'relative', height: '90vh', display: 'flex', alignItems: 'center', justifyContent: 'center', overflow: 'hidden'
       }}>
         <div style={{ 
           position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', 
-          backgroundImage: 'url("https://images.unsplash.com/photo-1496568816309-51d7c20e3b21?q=80&w=1920&auto=format&fit=crop")',
+          backgroundImage: 'url("https://images.unsplash.com/photo-1512453979798-5ea904ac66de?q=80&w=1920&auto=format&fit=crop")',
           backgroundSize: 'cover', backgroundPosition: 'center', filter: 'brightness(0.35)'
         }}></div>
 
@@ -95,16 +103,16 @@ const Home = () => {
             <span style={{ fontSize: '0.85rem', color: '#fff', letterSpacing: '1px', fontWeight: '600' }}>PREMIUM DOCUMENT SERVICES</span>
           </div>
           <h1 style={{ 
-            fontSize: 'clamp(2.8rem, 8vw, 5.5rem)', margin: '0 0 20px 0', fontWeight: '800', lineHeight: 1.1,
+            fontSize: 'clamp(3rem, 6vw, 5.5rem)', margin: '0 0 20px 0', fontWeight: '800', lineHeight: 1.1,
             background: 'linear-gradient(180deg, #FFFFFF 0%, #94a3b8 100%)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent'
           }}>
             Royal Route <br /> To Success.
           </h1>
-          <p style={{ fontSize: 'clamp(1rem, 4vw, 1.4rem)', color: '#cbd5e1', marginBottom: '40px', maxWidth: '700px', margin: '0 auto 40px auto' }}>
+          <p style={{ fontSize: 'clamp(1.1rem, 2vw, 1.4rem)', color: '#cbd5e1', marginBottom: '40px', maxWidth: '700px', margin: '0 auto 40px auto' }}>
             The premier government liaison partner for global businesses expanding into the UAE.
           </p>
-          <div style={{ display: 'flex', gap: '15px', justifyContent: 'center', flexWrap: 'wrap' }}>
-             <Link to="/contact"><button className="btn-primary" style={{ padding: '15px 40px', fontSize: '1.1rem' }}>Consult Now</button></Link>
+          <div style={{ display: 'flex', gap: '20px', justifyContent: 'center', flexWrap: 'wrap' }}>
+             <Link to="/contact"><button className="btn-primary" style={{ padding: '16px 40px', fontSize: '1.1rem' }}>Consult Now</button></Link>
           </div>
         </motion.div>
       </section>
@@ -113,8 +121,9 @@ const Home = () => {
       <section className="container" style={{ padding: '80px 20px' }}>
         <div style={{ textAlign: 'center', marginBottom: '80px' }}>
           <span style={{ color: '#60a5fa', fontWeight: 'bold', letterSpacing: '2px', textTransform: 'uppercase' }}>Our Capabilities</span>
-          <h2 style={{ fontSize: 'clamp(2rem, 5vw, 3rem)', marginTop: '10px' }}>Comprehensive Solutions</h2>
+          <h2 style={{ fontSize: 'clamp(2.5rem, 5vw, 3rem)', marginTop: '10px' }}>Comprehensive Solutions</h2>
         </div>
+        
         <div style={{ position: 'relative' }}>
           {services.map((service, index) => (
             <Card key={service.id} service={service} index={index} total={services.length} />
@@ -122,19 +131,18 @@ const Home = () => {
         </div>
       </section>
 
-      {/* 3. WHY CHOOSE ROYAL ROUTE - MOBILE FIXED */}
+      {/* 3. WHY CHOOSE ROYAL ROUTE */}
       <section style={{ padding: '80px 20px', background: 'rgba(0,0,0,0.2)' }}>
         <div className="container">
-          {/* UPDATED GRID: minmax(280px) ensures it fits on iPhone SE and small Androids */}
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '60px', alignItems: 'center' }}>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(290px, 1fr))', gap: '60px', alignItems: 'center' }}>
             <div>
               <span style={{ color: '#60a5fa', fontWeight: 'bold', letterSpacing: '1px' }}>THE ROYAL STANDARD</span>
-              <h2 style={{ fontSize: 'clamp(2rem, 5vw, 3rem)', margin: '10px 0 30px 0', lineHeight: '1.1' }}>We Accelerate Growth.</h2>
-              <p style={{ fontSize: '1rem', color: '#cbd5e1', lineHeight: '1.7', marginBottom: '30px' }}>
+              <h2 style={{ fontSize: 'clamp(2rem, 4vw, 3rem)', margin: '10px 0 30px 0', lineHeight: '1.1' }}>We Accelerate Growth.</h2>
+              <p style={{ fontSize: '1rem', color: '#cbd5e1', lineHeight: '1.8', marginBottom: '30px' }}>
                 In the fast-paced Dubai market, delays cost money. Royal Route redefines the experience. We combine <strong>insider government knowledge</strong> with a <strong>fully digital workflow</strong>.
               </p>
               
-              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '20px' }}>
+              <div className="benefits-grid" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '20px' }}>
                 {[
                   { icon: ShieldCheck, title: "100% Compliance", text: "Zero risk of fines." },
                   { icon: Zap, title: "Express Processing", text: "VIP channels." },
@@ -159,59 +167,65 @@ const Home = () => {
         </div>
       </section>
 
-      {/* 4. SCROLLABLE TESTIMONIALS - MOBILE FIXED */}
+      {/* 4. SCROLLABLE TESTIMONIALS (One at a time style) */}
       <section style={{ padding: '80px 0' }}>
         <div className="container" style={{ textAlign: 'center', marginBottom: '50px' }}>
           <h2 style={{ fontSize: 'clamp(2rem, 5vw, 3rem)', marginBottom: '10px' }}>Trusted By Leaders</h2>
         </div>
 
-        {/* Horizontal Scroll Container */}
+        {/* Updated Scroll Container */}
         <div 
+          className="no-scrollbar"
           style={{ 
             display: 'flex', 
-            gap: '20px', 
             overflowX: 'auto', 
-            padding: '20px 20px',
-            scrollSnapType: 'x mandatory',
-            WebkitOverflowScrolling: 'touch',
-            scrollbarWidth: 'none', 
-            msOverflowStyle: 'none' 
+            scrollSnapType: 'x mandatory', // Enforces snapping to 1 item
+            paddingBottom: '20px',
+            WebkitOverflowScrolling: 'touch'
           }}
-          className="no-scrollbar"
         >
           {testimonials.map((t, i) => (
-            <motion.div 
-              key={i}
-              whileHover={{ scale: 1.02 }}
-              className="glass-panel"
+            <div 
+              key={i} 
               style={{ 
-                minWidth: '280px', /* SAFE FOR MOBILE (Was 350px) */
-                maxWidth: '350px',
-                padding: '30px', 
-                background: 'rgba(255,255,255,0.05)',
-                scrollSnapAlign: 'center',
-                flexShrink: 0
+                flex: '0 0 100%', // FORCE 100% width
+                scrollSnapAlign: 'center', 
+                padding: '0 20px', // Creates the "gap" visually
+                display: 'flex', 
+                justifyContent: 'center' 
               }}
             >
-              <Quote size={30} color="#2563eb" style={{ opacity: 0.5, marginBottom: '20px' }} />
-              <p style={{ fontSize: '1rem', lineHeight: '1.6', color: '#cbd5e1', marginBottom: '30px', fontStyle: 'italic', minHeight: '80px' }}>
-                "{t.text}"
-              </p>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '15px' }}>
-                <div style={{ width: '50px', height: '50px', borderRadius: '50%', background: '#60a5fa', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#0f172a', fontWeight: 'bold', fontSize: '1.2rem' }}>
-                  {t.name.charAt(0)}
+              <motion.div 
+                whileHover={{ scale: 1.02 }}
+                className="glass-panel"
+                style={{ 
+                  width: '100%', // Fill the wrapper
+                  maxWidth: '600px', // Don't get too wide on desktop
+                  padding: '40px', 
+                  background: 'rgba(255,255,255,0.05)',
+                  position: 'relative'
+                }}
+              >
+                <Quote size={40} color="#2563eb" style={{ opacity: 0.5, marginBottom: '20px' }} />
+                <p style={{ fontSize: '1.1rem', lineHeight: '1.6', color: '#cbd5e1', marginBottom: '30px', fontStyle: 'italic', minHeight: '80px' }}>
+                  "{t.text}"
+                </p>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '15px' }}>
+                  <div style={{ width: '50px', height: '50px', borderRadius: '50%', background: '#60a5fa', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#0f172a', fontWeight: 'bold', fontSize: '1.2rem' }}>
+                    {t.name.charAt(0)}
+                  </div>
+                  <div>
+                    <div style={{ fontWeight: 'bold', fontSize: '1.1rem' }}>{t.name}</div>
+                    <div style={{ fontSize: '0.9rem', color: '#60a5fa' }}>{t.role}</div>
+                  </div>
                 </div>
-                <div>
-                  <div style={{ fontWeight: 'bold', fontSize: '1rem' }}>{t.name}</div>
-                  <div style={{ fontSize: '0.85rem', color: '#60a5fa' }}>{t.role}</div>
-                </div>
-              </div>
-            </motion.div>
+              </motion.div>
+            </div>
           ))}
         </div>
         
         <div style={{ textAlign: 'center', marginTop: '20px', color: '#64748b', fontSize: '0.9rem' }}>
-          &larr; Swipe to see more &rarr;
+          &larr; Swipe to read more &rarr;
         </div>
 
         <style>{`
