@@ -9,10 +9,14 @@
   --glass-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3);
 }
 
+/* CRITICAL MOBILE FIX: Ensures padding doesn't increase width */
+* {
+  box-sizing: border-box;
+}
+
 body {
   margin: 0;
   font-family: 'Outfit', sans-serif;
-  /* The Fixed Background for Glass Effect */
   background: radial-gradient(circle at top right, #1e3a8a, #0f172a);
   background-attachment: fixed; 
   color: white;
@@ -78,4 +82,5 @@ body {
   max-width: 1200px;
   margin: 0 auto;
   padding: 0 20px;
+  width: 100%; /* Ensures it doesn't overflow on mobile */
 }
