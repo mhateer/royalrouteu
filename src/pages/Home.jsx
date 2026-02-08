@@ -22,13 +22,13 @@ const testimonials = [
   { name: "Sarah Jenkins", role: "HR Director", text: "Processing 50+ employee visas used to be a nightmare. Royal Route automated the entire workflow for us." }
 ];
 
-// Card Component for the Stacking Effect
+// Card Component with Mobile Logic
 const Card = ({ service, index, total }) => {
   return (
     <div 
       style={{ 
         position: 'sticky', 
-        top: `${100 + index * 20}px`,
+        top: `${100 + index * 20}px`, // Stacking effect
         marginBottom: `${(total - index) * 20}px`, 
         zIndex: index,
         paddingTop: '20px'
@@ -41,12 +41,16 @@ const Card = ({ service, index, total }) => {
           transition={{ duration: 0.5 }}
           className="glass-panel"
           style={{ 
-            display: 'flex', height: '400px', overflow: 'hidden',
-            background: '#1e3a8a', border: '1px solid rgba(255,255,255,0.1)',
-            boxShadow: '0 -10px 40px rgba(0,0,0,0.5)' 
+            display: 'flex', 
+            height: '400px', 
+            overflow: 'hidden',
+            background: '#1e3a8a', 
+            border: '1px solid rgba(255,255,255,0.1)',
+            boxShadow: '0 -10px 40px rgba(0,0,0,0.5)'
           }}
         >
-          <div style={{ flex: 1, position: 'relative', display: 'none', md: { display: 'block' } }} className="desktop-image">
+          {/* Image Side - Hidden on Mobile via CSS Class */}
+          <div className="card-image" style={{ flex: 1, position: 'relative' }}>
             <div style={{ 
               position: 'absolute', inset: 0, 
               backgroundImage: `url(${serviceImages[service.id] || serviceImages['business-setup']})`,
@@ -54,15 +58,16 @@ const Card = ({ service, index, total }) => {
             }}></div>
             <div style={{ position: 'absolute', inset: 0, background: 'rgba(30, 58, 138, 0.4)' }}></div>
           </div>
-          <div style={{ flex: 1.5, padding: '40px', display: 'flex', flexDirection: 'column', justifyContent: 'center', background: 'rgba(15, 23, 42, 0.95)' }}>
+
+          {/* Text Side - Full Width on Mobile */}
+          <div style={{ flex: 1.5, padding: '30px', display: 'flex', flexDirection: 'column', justifyContent: 'center', background: 'rgba(15, 23, 42, 0.95)' }}>
             <div style={{ marginBottom: '20px', color: '#60a5fa' }}><service.icon size={40} /></div>
-            <h3 style={{ fontSize: '2rem', margin: '0 0 15px 0', color: 'white' }}>{service.title}</h3>
-            <p style={{ fontSize: '1.1rem', color: '#cbd5e1', lineHeight: '1.6', marginBottom: '30px' }}>{service.description}</p>
+            <h3 style={{ fontSize: '1.8rem', margin: '0 0 15px 0', color: 'white' }}>{service.title}</h3>
+            <p style={{ fontSize: '1rem', color: '#cbd5e1', lineHeight: '1.6', marginBottom: '30px' }}>{service.description}</p>
             <div style={{ display: 'flex', alignItems: 'center', gap: '10px', color: '#60a5fa', fontWeight: 'bold' }}>
               VIEW DETAILS <ArrowRight size={18} />
             </div>
           </div>
-          <style>{`@media (min-width: 768px) { .desktop-image { display: block !important; } }`}</style>
         </motion.div>
       </Link>
     </div>
@@ -72,13 +77,21 @@ const Card = ({ service, index, total }) => {
 const Home = () => {
   return (
     <div>
+      {/* CSS Injection for Mobile Responsiveness */}
+      <style>{`
+        @media (max-width: 768px) {
+          .card-image { display: none !important; } /* Hide card image on mobile */
+          .benefits-grid { grid-template-columns: 1fr !important; } /* Stack benefits */
+        }
+      `}</style>
+
       {/* 1. HERO SECTION */}
       <section style={{ 
         position: 'relative', height: '90vh', display: 'flex', alignItems: 'center', justifyContent: 'center', overflow: 'hidden'
       }}>
         <div style={{ 
           position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', 
-          backgroundImage: 'url("https://images.unsplash.com/photo-1496568816309-51d7c20e3b21?q=80&w=1920&auto=format&fit=crop")',
+          backgroundImage: 'url("https://images.unsplash.com/photo-1512453979798-5ea904ac66de?q=80&w=1920&auto=format&fit=crop")',
           backgroundSize: 'cover', backgroundPosition: 'center', filter: 'brightness(0.35)'
         }}></div>
 
@@ -105,11 +118,12 @@ const Home = () => {
       </section>
 
       {/* 2. STACKING SERVICES SECTION */}
-      <section className="container" style={{ padding: '100px 20px' }}>
-        <div style={{ textAlign: 'center', marginBottom: '80px' }}>
+      <section className="container" style={{ padding: '80px 20px' }}>
+        <div style={{ textAlign: 'center', marginBottom: '60px' }}>
           <span style={{ color: '#60a5fa', fontWeight: 'bold', letterSpacing: '2px', textTransform: 'uppercase' }}>Our Capabilities</span>
-          <h2 style={{ fontSize: '3rem', marginTop: '10px' }}>Comprehensive Solutions</h2>
+          <h2 style={{ fontSize: 'clamp(2.5rem, 5vw, 3rem)', marginTop: '10px' }}>Comprehensive Solutions</h2>
         </div>
+        
         <div style={{ position: 'relative' }}>
           {services.map((service, index) => (
             <Card key={service.id} service={service} index={index} total={services.length} />
@@ -117,26 +131,28 @@ const Home = () => {
         </div>
       </section>
 
-      {/* 3. NEW "WHY CHOOSE ROYAL ROUTE" SECTION */}
-      <section style={{ padding: '100px 20px', background: 'rgba(0,0,0,0.2)' }}>
+      {/* 3. "WHY CHOOSE ROYAL ROUTE" SECTION */}
+      <section style={{ padding: '80px 20px', background: 'rgba(0,0,0,0.2)' }}>
         <div className="container">
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(350px, 1fr))', gap: '60px', alignItems: 'center' }}>
+          <div style={{ 
+            display: 'grid', 
+            gridTemplateColumns: 'repeat(auto-fit, minmax(290px, 1fr))', // FIX: Reduced to 290px for mobile
+            gap: '60px', 
+            alignItems: 'center' 
+          }}>
             <div>
               <span style={{ color: '#60a5fa', fontWeight: 'bold', letterSpacing: '1px' }}>THE ROYAL STANDARD</span>
-              <h2 style={{ fontSize: '3rem', margin: '10px 0 30px 0', lineHeight: '1.1' }}>We Don't Just Process Documents. <br /> We Accelerate Growth.</h2>
-              <p style={{ fontSize: '1.1rem', color: '#cbd5e1', lineHeight: '1.8', marginBottom: '30px' }}>
-                In the fast-paced Dubai market, delays cost money. Traditional PRO services are slow, manual, and opaque. 
-                <br /><br />
-                Royal Route redefines the experience. We combine <strong>insider government knowledge</strong> with a <strong>fully digital workflow</strong>. 
-                While others are standing in line, we are getting your approvals stamped. From complex corporate structuring to urgent visa clearances, we are the strategic partner you can trust.
+              <h2 style={{ fontSize: 'clamp(2rem, 4vw, 3rem)', margin: '10px 0 30px 0', lineHeight: '1.1' }}>We Accelerate Growth.</h2>
+              <p style={{ fontSize: '1rem', color: '#cbd5e1', lineHeight: '1.8', marginBottom: '30px' }}>
+                In the fast-paced Dubai market, delays cost money. Royal Route redefines the experience. We combine <strong>insider government knowledge</strong> with a <strong>fully digital workflow</strong>.
               </p>
               
-              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '20px' }}>
+              <div className="benefits-grid" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '20px' }}>
                 {[
-                  { icon: ShieldCheck, title: "100% Compliance", text: "Zero risk of fines or rejections." },
-                  { icon: Zap, title: "Express Processing", text: "VIP channels for urgent needs." },
-                  { icon: Globe, title: "Remote Setup", text: "Launch from anywhere in the world." },
-                  { icon: Clock, title: "24/7 Support", text: "Always available when you need us." },
+                  { icon: ShieldCheck, title: "100% Compliance", text: "Zero risk of fines." },
+                  { icon: Zap, title: "Express Processing", text: "VIP channels." },
+                  { icon: Globe, title: "Remote Setup", text: "Launch from anywhere." },
+                  { icon: Clock, title: "24/7 Support", text: "Always available." },
                 ].map((item, i) => (
                   <div key={i} style={{ display: 'flex', gap: '15px' }}>
                     <div style={{ color: '#60a5fa' }}><item.icon size={24} /></div>
@@ -157,24 +173,18 @@ const Home = () => {
       </section>
 
       {/* 4. SCROLLABLE TESTIMONIALS */}
-      <section style={{ padding: '100px 0' }}>
+      <section style={{ padding: '80px 0' }}>
         <div className="container" style={{ textAlign: 'center', marginBottom: '50px' }}>
-          <h2 style={{ fontSize: '3rem', marginBottom: '10px' }}>Trusted By Leaders</h2>
+          <h2 style={{ fontSize: 'clamp(2rem, 5vw, 3rem)', marginBottom: '10px' }}>Trusted By Leaders</h2>
         </div>
 
-        {/* Horizontal Scroll Container */}
+        {/* FIX: Reduced minWidth to 280px for mobile safety */}
         <div 
           style={{ 
-            display: 'flex', 
-            gap: '30px', 
-            overflowX: 'auto', 
-            padding: '20px 5vw',
-            scrollSnapType: 'x mandatory',
-            WebkitOverflowScrolling: 'touch',
-            scrollbarWidth: 'none', // Hide scrollbar Firefox
-            msOverflowStyle: 'none' // Hide scrollbar IE
+            display: 'flex', gap: '20px', overflowX: 'auto', 
+            padding: '20px 20px', scrollSnapType: 'x mandatory',
+            scrollbarWidth: 'none', msOverflowStyle: 'none'
           }}
-          className="no-scrollbar" // Helper class we will define in styles
         >
           {testimonials.map((t, i) => (
             <motion.div 
@@ -182,40 +192,34 @@ const Home = () => {
               whileHover={{ scale: 1.02 }}
               className="glass-panel"
               style={{ 
-                minWidth: '350px', 
-                maxWidth: '400px',
-                padding: '40px', 
+                minWidth: '280px', // SAFE MOBILE WIDTH
+                maxWidth: '350px',
+                padding: '30px', 
                 background: 'rgba(255,255,255,0.05)',
                 scrollSnapAlign: 'center',
                 flexShrink: 0
               }}
             >
-              <Quote size={40} color="#2563eb" style={{ opacity: 0.5, marginBottom: '20px' }} />
-              <p style={{ fontSize: '1.1rem', lineHeight: '1.6', color: '#cbd5e1', marginBottom: '30px', fontStyle: 'italic', minHeight: '100px' }}>
+              <Quote size={30} color="#2563eb" style={{ opacity: 0.5, marginBottom: '20px' }} />
+              <p style={{ fontSize: '1rem', lineHeight: '1.6', color: '#cbd5e1', marginBottom: '30px', fontStyle: 'italic', minHeight: '80px' }}>
                 "{t.text}"
               </p>
               <div style={{ display: 'flex', alignItems: 'center', gap: '15px' }}>
-                <div style={{ width: '50px', height: '50px', borderRadius: '50%', background: '#60a5fa', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#0f172a', fontWeight: 'bold', fontSize: '1.2rem' }}>
+                <div style={{ width: '40px', height: '40px', borderRadius: '50%', background: '#60a5fa', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#0f172a', fontWeight: 'bold', fontSize: '1.2rem' }}>
                   {t.name.charAt(0)}
                 </div>
                 <div>
-                  <div style={{ fontWeight: 'bold', fontSize: '1.1rem' }}>{t.name}</div>
-                  <div style={{ fontSize: '0.9rem', color: '#60a5fa' }}>{t.role}</div>
+                  <div style={{ fontWeight: 'bold', fontSize: '1rem' }}>{t.name}</div>
+                  <div style={{ fontSize: '0.85rem', color: '#60a5fa' }}>{t.role}</div>
                 </div>
               </div>
             </motion.div>
           ))}
         </div>
         
-        {/* Scroll Hint */}
         <div style={{ textAlign: 'center', marginTop: '20px', color: '#64748b', fontSize: '0.9rem' }}>
           &larr; Swipe to see more &rarr;
         </div>
-
-        {/* Hide Scrollbar CSS injection */}
-        <style>{`
-          .no-scrollbar::-webkit-scrollbar { display: none; }
-        `}</style>
       </section>
     </div>
   );
