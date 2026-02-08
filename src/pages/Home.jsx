@@ -91,7 +91,7 @@ const Home = () => {
       }}>
         <div style={{ 
           position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', 
-          backgroundImage: 'url("https://images.unsplash.com/photo-1512453979798-5ea904ac66de?q=80&w=1920&auto=format&fit=crop")',
+          backgroundImage: 'url("https://images.unsplash.com/photo-1496568816309-51d7c20e3b21?q=80&w=1920&auto=format&fit=crop")',
           backgroundSize: 'cover', backgroundPosition: 'center', filter: 'brightness(0.35)'
         }}></div>
 
