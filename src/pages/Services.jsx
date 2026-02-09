@@ -3,22 +3,23 @@ import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { ArrowRight, CheckCircle } from 'lucide-react';
 
+// UPDATED IMAGE MAPPING TO MATCH YOUR NEW PDF SERVICES
 const serviceImages = {
-  "dubai-court": "https://images.unsplash.com/photo-1589829085413-56de8ae18c73?auto=format&fit=crop&q=80&w=800",
-  "immigration": "https://images.unsplash.com/photo-1469854523086-cc02fe5d8800?auto=format&fit=crop&q=80&w=800",
-  "business-setup": "https://images.unsplash.com/photo-1554469384-e58fac16e23a?auto=format&fit=crop&q=80&w=800",
-  "attestation": "https://images.unsplash.com/photo-1555421689-d68471e189f2?auto=format&fit=crop&q=80&w=800",
-  "trakhees": "https://images.unsplash.com/photo-1503387762-592deb58ef4e?auto=format&fit=crop&q=80&w=800",
-  "amer-tasheel": "https://images.unsplash.com/photo-1556761175-5973dc0f32e7?auto=format&fit=crop&q=80&w=800",
-  "pro-services": "https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?auto=format&fit=crop&q=80&w=800",
-  "legal-translation": "https://images.unsplash.com/photo-1450101499163-c8848c66ca85?auto=format&fit=crop&q=80&w=800"
+  "business-setup": "https://images.unsplash.com/photo-1554469384-e58fac16e23a?auto=format&fit=crop&q=80&w=800", // Skyscrapers
+  "license-services": "https://images.unsplash.com/photo-1554224155-8d04cb21cd6c?auto=format&fit=crop&q=80&w=800", // Documents/Renewal
+  "immigration": "https://images.unsplash.com/photo-1569420078040-0275be132473?auto=format&fit=crop&q=80&w=800", // Passport/Travel
+  "amer-tasheel": "https://images.unsplash.com/photo-1556761175-5973dc0f32e7?auto=format&fit=crop&q=80&w=800", // Handshake/Meeting
+  "ejari-services": "https://images.unsplash.com/photo-1560518883-ce09059eeffa?auto=format&fit=crop&q=80&w=800", // Real Estate/Keys
+  "govt-approvals": "https://images.unsplash.com/photo-1541888946425-d81bb19240f5?auto=format&fit=crop&q=80&w=800", // Government Building
+  "attestation": "https://images.unsplash.com/photo-1555421689-d68471e189f2?auto=format&fit=crop&q=80&w=800", // Stamp/Certificate
+  "legal-translation": "https://images.unsplash.com/photo-1450101499163-c8848c66ca85?auto=format&fit=crop&q=80&w=800" // Signing/Translation
 };
 
 const Services = () => {
   return (
     <div style={{ paddingBottom: '100px' }}>
       
-      {/* 1. Page Header WITH BACKGROUND IMAGE */}
+      {/* 1. Page Header */}
       <section style={{ 
         position: 'relative',
         height: '60vh',
@@ -28,10 +29,9 @@ const Services = () => {
         textAlign: 'center',
         overflow: 'hidden'
       }}>
-        {/* Background Image */}
         <div style={{ 
           position: 'absolute', inset: 0,
-          backgroundImage: 'url("https://images.unsplash.com/photo-1497366216548-37526070297c?q=80&w=1920&auto=format&fit=crop")', // Corporate Office BG
+          backgroundImage: 'url("https://images.unsplash.com/photo-1497366216548-37526070297c?q=80&w=1920&auto=format&fit=crop")',
           backgroundSize: 'cover',
           backgroundPosition: 'center',
           filter: 'brightness(0.3)'
@@ -51,11 +51,25 @@ const Services = () => {
       </section>
 
       {/* 2. Detailed Service List */}
-      <div className="container" style={{ display: 'flex', flexDirection: 'column', gap: '100px', marginTop: '100px' }}>
+      <div className="container" style={{ display: 'flex', flexDirection: 'column', gap: '80px', marginTop: '100px' }}>
+        
+        {/* MOBILE STYLES INJECTION */}
+        <style>{`
+          @media (max-width: 768px) {
+            .service-row {
+              flex-direction: column-reverse !important; /* Forces Image Top, Text Bottom */
+              gap: 40px !important;
+            }
+            .service-text { width: 100% !important; min-width: 0 !important; }
+            .service-image { width: 100% !important; min-width: 0 !important; }
+          }
+        `}</style>
+
         {services.map((service, index) => {
           const isEven = index % 2 === 0;
           return (
             <motion.div 
+              className="service-row"
               key={service.id}
               initial={{ opacity: 0, y: 50 }}
               whileInView={{ opacity: 1, y: 0 }}
@@ -70,7 +84,7 @@ const Services = () => {
               }}
             >
               {/* Text Side */}
-              <div style={{ flex: 1, minWidth: '300px' }}>
+              <div className="service-text" style={{ flex: 1, minWidth: '300px' }}>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '15px', marginBottom: '20px' }}>
                   <div style={{ background: 'rgba(37,99,235,0.2)', padding: '15px', borderRadius: '12px' }}>
                     <service.icon size={30} color="#60a5fa" />
@@ -103,11 +117,13 @@ const Services = () => {
               </div>
 
               {/* Image Side */}
-              <div style={{ flex: 1, minWidth: '300px' }}>
+              <div className="service-image" style={{ flex: 1, minWidth: '300px' }}>
                 <div className="glass-panel" style={{ padding: '10px', transform: isEven ? 'rotate(2deg)' : 'rotate(-2deg)' }}>
                   <img 
                     src={serviceImages[service.id]} 
-                    alt={service.title} 
+                    alt={service.title}
+                    // Fallback to avoid broken images if ID doesn't match
+                    onError={(e) => e.target.src = "https://images.unsplash.com/photo-1497366216548-37526070297c?auto=format&fit=crop&q=80&w=800"} 
                     style={{ width: '100%', borderRadius: '15px', display: 'block' }} 
                   />
                 </div>
