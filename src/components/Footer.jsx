@@ -4,7 +4,7 @@ import Logo from './Logo';
 
 const Footer = () => {
   
-  // 1. UPDATE YOUR LINKS HERE
+  // 1. UPDATE YOUR LINKS HERE so i added facebook link only, you can add more like instagram and linkedin by following the same structure
   const socialLinks = [
     { Icon: Facebook, url: "https://facebook.com/ahsanali.skmch" }
   ];
